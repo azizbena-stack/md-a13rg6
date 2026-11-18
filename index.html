@@ -233,7 +233,7 @@ fish.innerHTML='<img src="chrome-fish.webp" width="384" height="384" alt="" drag
 const SZ=84, HEAD=SZ*.3;           // la tête est à ~30 % du centre (image : tête en haut à gauche)
 const angDiff=(a,b)=>((b-a)%360+540)%360-180;
 const headTo=(dx,dy)=>Math.atan2(dy,dx)*180/Math.PI-225; // rotation pour que la tête pointe dans (dx,dy)
-let fx=innerWidth*.75,fy=170,vx=-1,vy=0,fr=-45,face=1,goal,tap=null,last=0,nextBubble=0;
+let appr=0,fx=innerWidth*.75,fy=170,vx=-1,vy=0,fr=-45,face=1,goal,tap=null,last=0,nextBubble=0;
 // face : 1 = tête à gauche (image normale), -1 = tête à droite (image en miroir) -> jamais à l'envers
 function newGoal(){goal={x:SZ/2+Math.random()*Math.max(1,innerWidth-SZ),y:SZ/2+Math.random()*Math.max(1,innerHeight-SZ)};}
 newGoal();
@@ -279,8 +279,13 @@ function bubble(){const b=document.createElement('i');b.className='bubble';const
   fx=Math.max(SZ*.4,Math.min(innerWidth-SZ*.4,fx));fy=Math.max(SZ*.4,Math.min(innerHeight-SZ*.4,fy));
   // retournement en douceur (largeur qui passe par ~0, comme un vrai demi-tour) + ondulation du corps
   fish.flip=(fish.flip??face)+(face-(fish.flip??face))*.12*dt;
-  const sx=(Math.abs(fish.flip)<.15?.15*Math.sign(fish.flip||1):fish.flip)*sc;
-  fish.style.transform='translate('+(fx-SZ/2)+'px,'+(fy-SZ/2)+'px) rotate('+(fr+wave*5*face)+'deg) scale('+sx+','+sc*(1+wave*.03)+') skewY('+(wave*4)+'deg)';
+  // Cut Off : plus on tourne, plus il vient vers l'écran (centre, plus gros, tête vers nous, en perspective)
+  appr+=(((tap||spinAt!==null)?0:knob/100)-appr)*.08*dt;
+  const a=appr, flipD=fish.flip+(1-fish.flip)*a;
+  const sx=(Math.abs(flipD)<.15?.15*Math.sign(flipD||1):flipD)*sc*(1+2*a);
+  const px=fx+(innerWidth/2-fx)*a, py=fy+(innerHeight*.45-fy)*a;
+  const rot=(fr+wave*5*face)+angDiff(fr+wave*5*face,-45)*a;
+  fish.style.transform='translate('+(px-SZ/2)+'px,'+(py-SZ/2)+'px) perspective(320px) rotateY('+(32*a)+'deg) rotateX('+(-10*a)+'deg) rotate('+rot+'deg) scale('+sx+','+sc*(1+2*a)*(1+wave*.03)+') skewY('+(wave*4*(1-a))+'deg)';
   requestAnimationFrame(loop);
 })(0);
 addEventListener('resize',newGoal);
