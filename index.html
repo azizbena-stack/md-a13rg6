@@ -280,7 +280,7 @@ function bubble(){const b=document.createElement('i');b.className='bubble';const
   // retournement en douceur (largeur qui passe par ~0, comme un vrai demi-tour) + ondulation du corps
   fish.flip=(fish.flip??face)+(face-(fish.flip??face))*.12*dt;
   // Cut Off : plus on tourne, plus il vient vers l'écran (centre, plus gros, tête vers nous, en perspective)
-  appr+=(((tap||spinAt!==null)?0:knob/100)-appr)*.08*dt;
+  appr+=(((tap||spinAt!==null||revealed)?0:knob/100)-appr)*.08*dt;
   const a=appr, flipD=fish.flip+(1-fish.flip)*a;
   const sx=(Math.abs(flipD)<.15?.15*Math.sign(flipD||1):flipD)*sc*(1+2*a);
   const px=fx+(innerWidth/2-fx)*a, py=fy+(innerHeight*.45-fy)*a;
