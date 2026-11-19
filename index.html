@@ -23,12 +23,12 @@ header span{width:9px;height:9px;border-radius:50%;background:var(--yel);box-sha
 .chrome{background:var(--chrome);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 #000)}
 .panel{background:linear-gradient(180deg,#141418,#0b0b0d);border:1px solid #3a3c42;border-radius:18px;position:relative;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.12) inset}
 .hero{padding:20px 18px;min-height:150px}
-.hero-top{display:flex;align-items:center;gap:.25em;font-size:clamp(36px,11vw,80px)}
+.hero-top{position:relative;display:flex;align-items:center;min-height:1.8em;font-size:clamp(36px,11vw,80px)}
 h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:1em;line-height:.86;margin:0;text-transform:uppercase}
 .hero p{margin:10px 0 0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
 .hero p b{color:var(--yel)}
 .fish{width:118px;height:118px}
-.logo-chrome{flex:none;width:2.5em;aspect-ratio:1;border-radius:50%;padding:.055em;
+.logo-chrome{position:absolute;left:75%;top:50%;transform:translate(-50%,-50%);width:1.8em;aspect-ratio:1;border-radius:50%;padding:.055em;
   background:conic-gradient(from 200deg,#fff,#6c7079,#e9ebef,#4a4d54,#c9ccd3,#fff);
   box-shadow:0 .04em 0 #000,0 .12em .25em rgba(0,0,0,.7),0 0 .3em rgba(255,255,255,.06)}
 .logo-chrome span{position:relative;display:block;height:100%;border-radius:50%;overflow:hidden;background:var(--chrome)}
@@ -140,7 +140,7 @@ footer{margin-top:24px;text-align:center;font-size:10px;letter-spacing:.15em;col
     <p class="when" id="when"></p>
     <div class="player">
       <div><strong id="track"></strong><small id="artist"></small></div>
-      <button type="button" id="listen" aria-label="Lire l'extrait">▶</button>
+      <button type="button" id="listen" aria-label="Lire l'extrait"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button>
     </div>
     <div class="links">
       <a id="insta" target="_blank" rel="noopener">Instagram ↗</a>
@@ -194,7 +194,8 @@ const pads=tracks.map((t,i)=>{
   const b=document.createElement('button');
   b.type='button';b.className='pad';b.setAttribute('aria-pressed','false');
   b.innerHTML='<span class="icon" aria-hidden="true">'+t.icon+'</span>'+t.name;
-  b.onclick=()=>{audio();active[i]=!active[i];b.setAttribute('aria-pressed',active[i]);
+  // iPhone : un play/pause muet pendant le tap autorise la lecture auto de l'extrait au drop
+  b.onclick=()=>{audio();if(ex.paused){ex.play().catch(()=>{});ex.pause();}active[i]=!active[i];b.setAttribute('aria-pressed',active[i]);
     if(!active.some(Boolean)){stop();paintKnob(0);}else start();progress();fishTap(b);};
   $('pads').insertBefore(b,$('knob-pad'));return b;
 });
@@ -374,7 +375,7 @@ function unlock(){
 
 // ---------- Extrait 30 s ----------
 const ex=$('excerpt');
-function setPlaying(on){$('listen').textContent=on?'❚❚':'▶';$('listen').setAttribute('aria-label',on?'Mettre en pause':"Lire l'extrait");}
+function setPlaying(on){$('listen').innerHTML='<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="'+(on?'M7 5h4v14H7zM13 5h4v14h-4z':'M8 5v14l11-7z')+'"/></svg>';$('listen').setAttribute('aria-label',on?'Mettre en pause':"Lire l'extrait");}
 function stopExcerpt(){if(!ex.paused)ex.pause();setPlaying(false);}
 async function playExcerpt(onDrop){
   try{
