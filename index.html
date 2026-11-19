@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="logo.png">
 <title>Brand'Ade Crew — Groove Machine</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -116,7 +118,7 @@ footer{margin-top:24px;text-align:center;font-size:10px;letter-spacing:.15em;col
     <div>
       <div class="hero-top">
         <h1 class="chrome">Groove<br>Machine</h1>
-        <div class="logo-chrome"><span><img src="img/logo.png" width="360" height="360" alt="Logo Brand'Ade Crew"></span></div>
+        <div class="logo-chrome"><span><img src="logo.png" width="360" height="360" alt="Logo Brand'Ade Crew"></span></div>
       </div>
       <p>Tape ton groove pour débloquer <b>le guest</b></p>
     </div>
@@ -146,7 +148,7 @@ footer{margin-top:24px;text-align:center;font-size:10px;letter-spacing:.15em;col
       <button type="button" id="share">Partager</button>
     </div>
     <p class="track-status" id="track-status" role="status"></p>
-    <img class="poster" id="poster" src="img/party-poster.webp" width="920" height="1227" loading="lazy" alt="Affiche de la Brand'Ade Crew Party, dimanche 29 novembre 2026 au Barberousse à Nîmes, de 15 h à 1 h.">
+    <img class="poster" id="poster" src="party-poster.webp" width="920" height="1227" loading="lazy" alt="Affiche de la Brand'Ade Crew Party, dimanche 29 novembre 2026 au Barberousse à Nîmes, de 15 h à 1 h.">
     <button class="replay" type="button" id="replay">↻ Replay</button>
     <audio id="excerpt" preload="none" playsinline></audio>
   </section>
@@ -229,7 +231,7 @@ $('knob').addEventListener('input',e=>{if(!drag&&Date.now()-lastKeyTap>900){last
 
 // ---------- Le poisson se promène dans l'app et vient taper pads / bouton ----------
 const fish=document.createElement('div');fish.className='roamer';fish.setAttribute('aria-hidden','true');
-fish.innerHTML='<img src="img/chrome-fish.webp" width="384" height="384" alt="" draggable="false">';document.body.append(fish);
+fish.innerHTML='<img src="chrome-fish.webp" width="384" height="384" alt="" draggable="false">';document.body.append(fish);
 const SZ=84, HEAD=SZ*.3;           // la tête est à ~30 % du centre (image : tête en haut à gauche)
 const angDiff=(a,b)=>((b-a)%360+540)%360-180;
 const headTo=(dx,dy)=>Math.atan2(dy,dx)*180/Math.PI-225; // rotation pour que la tête pointe dans (dx,dy)
@@ -387,7 +389,7 @@ ex.addEventListener('timeupdate',()=>{if(ex.currentTime>=EXCERPT){ex.pause();ex.
 ex.addEventListener('pause',()=>setPlaying(false));
 
 // ---------- Confettis chrome ----------
-const fishImg=new Image();fishImg.src='img/chrome-fish.webp';
+const fishImg=new Image();fishImg.src='chrome-fish.webp';
 function celebrate(){
   if(still)return;
   const c=$('confetti');c.hidden=false;
