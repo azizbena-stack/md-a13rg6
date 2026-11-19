@@ -3,8 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="logo.png">
 <title>Brand'Ade Crew — Groove Machine</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -23,12 +21,12 @@ header span{width:9px;height:9px;border-radius:50%;background:var(--yel);box-sha
 .chrome{background:var(--chrome);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 #000)}
 .panel{background:linear-gradient(180deg,#141418,#0b0b0d);border:1px solid #3a3c42;border-radius:18px;position:relative;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.12) inset}
 .hero{padding:20px 18px;min-height:150px}
-.hero-top{position:relative;font-size:clamp(36px,11vw,80px)}
+.hero-top{display:flex;align-items:center;gap:.25em;font-size:clamp(36px,11vw,80px)}
 h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:1em;line-height:.86;margin:0;text-transform:uppercase}
 .hero p{margin:10px 0 0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
 .hero p b{color:var(--yel)}
 .fish{width:118px;height:118px}
-.logo-chrome{position:absolute;left:75%;top:50%;transform:translate(-50%,-50%);width:1.72em;aspect-ratio:1;border-radius:50%;padding:.055em;
+.logo-chrome{flex:none;width:2.5em;aspect-ratio:1;border-radius:50%;padding:.055em;
   background:conic-gradient(from 200deg,#fff,#6c7079,#e9ebef,#4a4d54,#c9ccd3,#fff);
   box-shadow:0 .04em 0 #000,0 .12em .25em rgba(0,0,0,.7),0 0 .3em rgba(255,255,255,.06)}
 .logo-chrome span{position:relative;display:block;height:100%;border-radius:50%;overflow:hidden;background:var(--chrome)}
@@ -78,6 +76,8 @@ h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:1em;line-height
 .knob-copy b{display:block;font-family:Anton,sans-serif;font-weight:400;font-size:22px;text-transform:uppercase}
 .knob-copy b small{font-family:"Space Mono",monospace;font-size:12px;color:var(--yel);margin-left:6px}
 .knob-copy>small{font-size:11px;letter-spacing:.1em;color:var(--mute);text-transform:uppercase}
+/* néon jaune permanent autour des 6 rectangles (titre, 4 pads, Cut Off) */
+.hero,.pad,.knob-pad{border-color:var(--yel);box-shadow:0 0 0 1px rgba(255,222,97,.6),0 0 16px rgba(255,222,97,.45),0 0 12px rgba(255,222,97,.15) inset}
 .knob-pad input{position:absolute;inset:0;opacity:0;width:100%;height:100%;pointer-events:none}
 .progress{margin-top:16px;display:flex;justify-content:space-between;font-size:12px;letter-spacing:.08em;text-transform:uppercase;min-height:18px}
 .meter{height:4px;background:#1d1d22;border-radius:4px;margin-top:8px;overflow:hidden}
@@ -116,7 +116,7 @@ footer{margin-top:24px;text-align:center;font-size:10px;letter-spacing:.15em;col
     <div>
       <div class="hero-top">
         <h1 class="chrome">Groove<br>Machine</h1>
-        <div class="logo-chrome"><span><img src="logo.png" width="360" height="360" alt="Logo Brand'Ade Crew"></span></div>
+        <div class="logo-chrome"><span><img src="img/logo.png" width="360" height="360" alt="Logo Brand'Ade Crew"></span></div>
       </div>
       <p>Tape ton groove pour débloquer <b>le guest</b></p>
     </div>
@@ -146,7 +146,7 @@ footer{margin-top:24px;text-align:center;font-size:10px;letter-spacing:.15em;col
       <button type="button" id="share">Partager</button>
     </div>
     <p class="track-status" id="track-status" role="status"></p>
-    <img class="poster" id="poster" src="party-poster.webp" width="920" height="1227" loading="lazy" alt="Affiche de la Brand'Ade Crew Party, dimanche 29 novembre 2026 au Barberousse à Nîmes, de 15 h à 1 h.">
+    <img class="poster" id="poster" src="img/party-poster.webp" width="920" height="1227" loading="lazy" alt="Affiche de la Brand'Ade Crew Party, dimanche 29 novembre 2026 au Barberousse à Nîmes, de 15 h à 1 h.">
     <button class="replay" type="button" id="replay">↻ Replay</button>
     <audio id="excerpt" preload="none" playsinline></audio>
   </section>
@@ -229,7 +229,7 @@ $('knob').addEventListener('input',e=>{if(!drag&&Date.now()-lastKeyTap>900){last
 
 // ---------- Le poisson se promène dans l'app et vient taper pads / bouton ----------
 const fish=document.createElement('div');fish.className='roamer';fish.setAttribute('aria-hidden','true');
-fish.innerHTML='<img src="chrome-fish.webp" width="384" height="384" alt="" draggable="false">';document.body.append(fish);
+fish.innerHTML='<img src="img/chrome-fish.webp" width="384" height="384" alt="" draggable="false">';document.body.append(fish);
 const SZ=84, HEAD=SZ*.3;           // la tête est à ~30 % du centre (image : tête en haut à gauche)
 const angDiff=(a,b)=>((b-a)%360+540)%360-180;
 const headTo=(dx,dy)=>Math.atan2(dy,dx)*180/Math.PI-225; // rotation pour que la tête pointe dans (dx,dy)
@@ -387,7 +387,7 @@ ex.addEventListener('timeupdate',()=>{if(ex.currentTime>=EXCERPT){ex.pause();ex.
 ex.addEventListener('pause',()=>setPlaying(false));
 
 // ---------- Confettis chrome ----------
-const fishImg=new Image();fishImg.src='chrome-fish.webp';
+const fishImg=new Image();fishImg.src='img/chrome-fish.webp';
 function celebrate(){
   if(still)return;
   const c=$('confetti');c.hidden=false;
